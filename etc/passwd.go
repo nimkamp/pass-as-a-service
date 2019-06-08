@@ -38,6 +38,16 @@ func ParsePasswd(r io.Reader) ([]PasswdEntry, error) {
 	return entries, nil
 }
 
+func FindPasswordEntryByID(uid string, entries []PasswdEntry) (PasswdEntry, error) {
+	for _, entry := range entries {
+		if uid == entry.UserID {
+			return entry, nil
+		}
+	}
+
+	return PasswdEntry{}, fmt.Errorf("%s is not found", uid)
+}
+
 type PasswdEntry struct {
 	Name    string
 	UserID  string
