@@ -1,0 +1,9 @@
+nick:x:123:1::/Users/home/nick:/bin/bash
+kernoops:x:117:65534:Kernel Oops Tracking Daemon,,,:/:/bin/false
+pulse:x:118:125:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+nm-openvpn:x:119:127:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/bin/false
+rtkit:x:120:128:RealtimeKit,,,:/proc:/bin/false
+saned:x:121:129::/var/lib/saned:/bin/false
+usbmux:x:122:46:usbmux daemon,,,:/var/lib/usbmux:/bin/false
+george:x:1000:1000:george,,,:/home/george:/bin/bash
+nvidia-persistenced:x:123:131:NVIDIA Persistence Daemon,,,:/:/sbin/nologin
