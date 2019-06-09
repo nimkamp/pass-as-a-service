@@ -25,8 +25,8 @@ func ParseGroup(r io.Reader) ([]GroupEntry, error) {
 
 		e := GroupEntry{
 			Name:    splitLine[0],
-			GroupID: splitLine[1],
-			Members: splitLine[2],
+			GroupID: splitLine[2],
+			Members: splitLine[3],
 		}
 
 		entries = append(entries, e)
