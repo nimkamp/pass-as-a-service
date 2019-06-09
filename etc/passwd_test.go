@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/nimkamp/password-as-a-service/etc"
+	"github.com/nimkamp/pass-as-a-service/etc"
 )
 
 func TestParsePasswd(t *testing.T) {
@@ -54,6 +54,38 @@ func TestParsePasswd(t *testing.T) {
 		if got.Shell != want.Shell {
 			t.Errorf("want shell %s got %s", got.Shell, want.Shell)
 		}
+	}
+}
+
+func TestFindPasswordEntryByID(t *testing.T) {
+	wantEntries := []etc.PasswdEntry{
+		{
+			Name:    "nick",
+			UserID:  "123",
+			GroupID: "1",
+			Comment: "",
+			Home:    "/Users/home/nick",
+			Shell:   "/bin/bash",
+		},
+	}
+
+	testPasswdBytes := []byte(`nick:x:123:1::/Users/home/nick:/bin/bash
+bob:x:456:1::/Users/home/bob:/bin/bash
+george:x:789:1::/Users/home/george:/bin/bash`)
+	entries, err := etc.ParsePasswd(bytes.NewReader(testPasswdBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	entry, err := etc.FindPasswordEntryByID("123", entries)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := wantEntries[0]
+
+	if entry != want {
+		t.Errorf("want entry %v got %v", wantEntries, entry)
 	}
 
 }
