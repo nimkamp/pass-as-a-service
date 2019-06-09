@@ -26,7 +26,7 @@ func ParseGroup(r io.Reader) ([]GroupEntry, error) {
 		e := GroupEntry{
 			Name:    splitLine[0],
 			GroupID: splitLine[2],
-			Members: splitLine[3],
+			Member:  splitLine[3],
 		}
 
 		entries = append(entries, e)
@@ -35,8 +35,18 @@ func ParseGroup(r io.Reader) ([]GroupEntry, error) {
 	return entries, nil
 }
 
+func FindGroupEntryByID(gid string, groupEntries []GroupEntry) (GroupEntry, error) {
+	for _, entryGroup := range groupEntries {
+		if entryGroup.GroupID == gid {
+			return entryGroup, nil
+		}
+	}
+
+	return GroupEntry{}, fmt.Errorf("%s is not found", gid)
+}
+
 type GroupEntry struct {
 	Name    string
 	GroupID string
-	Members string
+	Member  string
 }

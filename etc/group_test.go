@@ -11,12 +11,12 @@ func TestParseGroup(t *testing.T) {
 	wantEntries := []etc.GroupEntry{
 		{
 			Name:    "nick",
-			GroupID: "123",
-			Members: "bob",
+			GroupID: "1",
+			Member:  "bob",
 		},
 	}
 
-	testGroupBytes := []byte(`nick:x:123:bob`)
+	testGroupBytes := []byte(`nick:x:1:bob`)
 	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
 	if err != nil {
 		t.Fatal(err)
@@ -33,11 +33,41 @@ func TestParseGroup(t *testing.T) {
 		}
 
 		if got.GroupID != want.GroupID {
-			t.Errorf("want uid %s got %s", got.GroupID, want.GroupID)
+			t.Errorf("want gid %s got %s", got.GroupID, want.GroupID)
 		}
 
-		if got.Members != want.Members {
-			t.Errorf("want members %s got %s", got.Members, want.Members)
+		if got.Member != want.Member {
+			t.Errorf("want Member %s got %s", got.Member, want.Member)
 		}
 	}
+}
+
+func TestFindGroupEntryByID(t *testing.T) {
+	wantEntries := []etc.GroupEntry{
+		{
+			Name:    "nick",
+			GroupID: "1",
+			Member:  "bob",
+		},
+	}
+
+	testGroupBytes := []byte(`nick:x:1:bob
+James:x:5:world
+Bob:x:7:jones`)
+	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	entry, err := etc.FindGroupEntryByID("1", entries)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := wantEntries[0]
+
+	if entry != want {
+		t.Errorf("want entry %v got %v", wantEntries, entry)
+	}
+
 }
