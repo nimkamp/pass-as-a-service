@@ -69,5 +69,62 @@ Bob:x:7:jones`)
 	if entry != want {
 		t.Errorf("want entry %v got %v", wantEntries, entry)
 	}
+}
 
+func TestFindGroupEntryByWrongID(t *testing.T) {
+	wantEntries := []etc.GroupEntry{
+		{
+			Name:    "james",
+			GroupID: "2",
+			Member:  "world",
+		},
+	}
+
+	testGroupBytes := []byte(`nick:x:1:bob
+James:x:5:world
+Bob:x:7:jones`)
+	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	entry, err := etc.FindGroupEntryByID(wantEntries[0].GroupID, entries)
+	if err == nil {
+		t.Fatal(err)
+	}
+
+	want := wantEntries[0]
+
+	if entry == want {
+		t.Errorf("want entry %v got %v", want, entry)
+	}
+}
+
+func TestFindGroupEntryByEmptyID(t *testing.T) {
+	wantEntries := []etc.GroupEntry{
+		{
+			Name:    "james",
+			GroupID: "5",
+			Member:  "world",
+		},
+	}
+
+	testGroupBytes := []byte(`nick:x:1:bob
+James:x:5:world
+Bob:x:7:jones`)
+	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	entry, err := etc.FindGroupEntryByID("", entries)
+	if err == nil {
+		t.Fatal(err)
+	}
+
+	want := wantEntries[0]
+
+	if entry == want {
+		t.Errorf("want entry %v got %v", want, entry)
+	}
 }
