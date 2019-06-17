@@ -7,12 +7,19 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi"
 	"github.com/nimkamp/pass-as-a-service/etc"
 )
 
 func main() {
+	passwdFile := os.Args[1]
+	groupFile := os.Args[2]
+
+	fmt.Println(passwdFile)
+	fmt.Println(groupFile)
+
 	var pTestBytes = []byte(`nick:x:1:1::/Users/home/nick:/bin/bash
 george:x:3:2::/Users/home/george:/bin/sh
 docker:x:321:1002::/Users/home/george:/bin/sh
@@ -139,6 +146,40 @@ docker:x:1002:dwoodlins
 		}
 		w.Write(jsonEntry)
 		return
+	})
+
+	r.Get("/users/query", func(w http.ResponseWriter, r *http.Request) {
+		queryValues := r.URL.Query()
+		fmt.Fprintf(w, "hello, %s!\n", queryValues.Get("name"))
+		entry, err := etc.GetPasswdByQuery(queryValues.Get("name"), queryValues.Get("uid"), queryValues.Get("gid"), queryValues.Get("comment"), queryValues.Get("home"), queryValues.Get("shell"), pEntries)
+		if err != nil {
+			http.Error(w, "User does not exist", 404)
+			return
+		}
+
+		jsonEntry, err := json.Marshal(entry)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		w.Write(jsonEntry)
+	})
+
+	r.Get("/groups/query", func(w http.ResponseWriter, r *http.Request) {
+		queryValues := r.URL.Query()
+		fmt.Fprintf(w, "hello, %s!\n", queryValues.Get("name"))
+		entry, err := etc.GetGroupByQuery(queryValues.Get("name"), queryValues.Get("gid"), queryValues.Get("member"), gEntries)
+		if err != nil {
+			http.Error(w, "Group does not exist", 404)
+			return
+		}
+
+		jsonEntry, err := json.Marshal(entry)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		w.Write(jsonEntry)
 	})
 
 	http.ListenAndServe(":3000", r)
