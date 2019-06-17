@@ -38,7 +38,7 @@ func ParsePasswd(r io.Reader) ([]PasswdEntry, error) {
 	return entries, nil
 }
 
-func FindPasswordEntryByID(uid string, entries []PasswdEntry) (PasswdEntry, error) {
+func FindPasswdEntryByID(uid string, entries []PasswdEntry) (PasswdEntry, error) {
 	for _, entry := range entries {
 		if uid == entry.UserID {
 			return entry, nil
@@ -46,6 +46,40 @@ func FindPasswordEntryByID(uid string, entries []PasswdEntry) (PasswdEntry, erro
 	}
 
 	return PasswdEntry{}, fmt.Errorf("%s is not found", uid)
+}
+
+func GetPasswdByQuery(name string, uid string, gid string, comment string, home string, shell string, entries []PasswdEntry) ([]PasswdEntry, error) {
+	var matchedEntries []PasswdEntry
+
+	for _, entry := range entries {
+		if name != "" && entry.Name != name {
+			continue
+		}
+
+		if uid != "" && entry.UserID != uid {
+			continue
+		}
+
+		if gid != "" && entry.GroupID != gid {
+			continue
+		}
+
+		if comment != "" && entry.Comment != comment {
+			continue
+		}
+
+		if shell != "" && entry.Shell != shell {
+			continue
+		}
+
+		if home != "" && entry.Home != home {
+			continue
+		}
+
+		matchedEntries = append(matchedEntries, entry)
+	}
+
+	return matchedEntries, nil
 }
 
 type PasswdEntry struct {

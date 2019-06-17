@@ -45,6 +45,28 @@ func FindGroupEntryByID(gid string, groupEntries []GroupEntry) (GroupEntry, erro
 	return GroupEntry{}, fmt.Errorf("%s is not found", gid)
 }
 
+func GetGroupByQuery(name string, gid string, member string, entries []GroupEntry) ([]GroupEntry, error) {
+	var matchedEntries []GroupEntry
+
+	for _, entry := range entries {
+		if name != "" && entry.Name != name {
+			continue
+		}
+
+		if gid != "" && entry.GroupID != gid {
+			continue
+		}
+
+		if member != "" && entry.Member != member {
+			continue
+		}
+
+		matchedEntries = append(matchedEntries, entry)
+	}
+
+	return matchedEntries, nil
+}
+
 type GroupEntry struct {
 	Name    string
 	GroupID string
