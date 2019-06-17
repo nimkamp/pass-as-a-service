@@ -20,7 +20,7 @@ func ParsePasswd(r io.Reader) ([]PasswdEntry, error) {
 
 		splitLine := strings.Split(string(line), ":")
 		if len(splitLine) != 7 {
-			return nil, fmt.Errorf("etcpasswd.Parse: expected 6 semi colons on parsed line but got %d", len(splitLine))
+			return nil, fmt.Errorf("etc.ParsePasswd: expected 6 semi colons on parsed line but got %d", len(splitLine))
 		}
 
 		e := PasswdEntry{
