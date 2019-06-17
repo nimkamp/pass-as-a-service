@@ -14,6 +14,10 @@ import (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Printf("Must provide password file and group file as two command line arguments\n")
+		os.Exit(1) //graceful exit
+	}
 	passwdFile := os.Args[1]
 	groupFile := os.Args[2]
 
@@ -40,6 +44,24 @@ func main() {
 		entry, err := etc.FindPasswdEntryByID(uid, passwdEntries)
 		if err != nil {
 			http.Error(w, "User ID does not exist", 404)
+			return
+		}
+
+		jsonEntry, err := json.Marshal(&entry)
+		if err != nil {
+			http.Error(w, "Unable to parse json", 406)
+			return
+
+		}
+		w.Write(jsonEntry)
+		return
+	})
+
+	r.Get("/users/{uid}/groups", func(w http.ResponseWriter, r *http.Request) {
+		uid := chi.URLParam(r, "uid")
+		entry, err := etc.FindGroupEntryByUserID(uid, passwdEntries, groupEntries)
+		if err != nil {
+			http.Error(w, "Group does not exist for this user", 404)
 			return
 		}
 
