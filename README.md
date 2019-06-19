@@ -8,8 +8,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Any Unix based system
-Root access
+Any Unix based system\
+Root access\
 Router for HTTP services
 
 
@@ -18,15 +18,15 @@ Router for HTTP services
 
 ### Unit tests
 
-cd pass-as-a-service/etc/
+cd pass-as-a-service/etc/\
 go test
 
 
 
 ## Deployment
-git clone https://github.com/nimkamp/pass-as-a-service
-cd pass-as-a-service
-go build
+git clone https://github.com/nimkamp/pass-as-a-service\
+cd pass-as-a-service\
+go build\
 ./pass-as-a-service (/etc/passwd) (/etc/group)
 
 
