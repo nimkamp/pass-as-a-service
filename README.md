@@ -15,6 +15,9 @@ Router for HTTP services
 
 
 ## Running the tests
+
+### Unit tests
+
 cd pass-as-a-service/etc/
 go test
 
