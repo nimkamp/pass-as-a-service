@@ -8,11 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Any Unix based system\
-Root access\
-Router for HTTP services
-
-
+Any Unix based system
 
 ## Running the tests
 
@@ -21,20 +17,15 @@ Router for HTTP services
 cd pass-as-a-service/etc/\
 go test
 
-
-
 ## Deployment
+go get -u github.com/go-chi/chi
 git clone https://github.com/nimkamp/pass-as-a-service\
 cd pass-as-a-service\
 go build\
 ./pass-as-a-service (/etc/passwd) (/etc/group)
 
-
 ## Built With
 
 * [Chi](https://github.com/go-chi/chi) - Router for building HTTP services
 
-## Authors
-
-* **Nick Imkamp**
 
