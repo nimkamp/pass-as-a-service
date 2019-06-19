@@ -1,13 +1,5 @@
 # pass-as-a-service
 
-#compile code
-go build
-
-#Execute binary
-./pass-as-a-service /path/to/passwordfile /path/to/groupfile 
-
-# pass-as-a-service
-
 This project contains several api endpoints displaying user and group information from files that have been parsed.
 
 ## Getting Started
