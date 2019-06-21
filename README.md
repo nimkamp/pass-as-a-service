@@ -1,4 +1,4 @@
-# pass-as-a-service
+# Pass-as-a-service API
 
 This project contains several api endpoints displaying user and group information from files that have been parsed.
 
@@ -10,19 +10,22 @@ These instructions will get you a copy of the project up and running on your loc
 
 Any Unix based system
 
-## Running the tests
 
-### Unit tests
-
+### Run Unit tests
+```
 cd pass-as-a-service/etc/\
 go test
+```
 
-## Deployment
+## Running Project 
+You need to pass in two paramters when executing the binary for pass-as-a-service. The first parameter is the passwords file and the second parameter is the groups file.
+```
 go get -u github.com/go-chi/chi
 git clone https://github.com/nimkamp/pass-as-a-service\
 cd pass-as-a-service\
 go build\
 ./pass-as-a-service (/etc/passwd) (/etc/group)
+```
 
 ## Built With
 
