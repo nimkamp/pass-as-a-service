@@ -52,8 +52,8 @@ func TestFindGroupEntryByID(t *testing.T) {
 	}
 
 	testGroupBytes := []byte(`nick:x:1:bob
-James:x:5:world
-Bob:x:7:jones`)
+james:x:5:world
+bob:x:7:jones`)
 	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
 	if err != nil {
 		t.Fatal(err)
@@ -81,7 +81,7 @@ func TestFindGroupEntryByWrongID(t *testing.T) {
 	}
 
 	testGroupBytes := []byte(`nick:x:1:bob
-James:x:5:world
+james:x:5:world
 Bob:x:7:jones`)
 	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
 	if err != nil {
@@ -110,8 +110,8 @@ func TestFindGroupEntryByEmptyID(t *testing.T) {
 	}
 
 	testGroupBytes := []byte(`nick:x:1:bob
-James:x:5:world
-Bob:x:7:jones`)
+james:x:5:world
+bob:x:7:jones`)
 	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
 	if err != nil {
 		t.Fatal(err)
@@ -126,5 +126,81 @@ Bob:x:7:jones`)
 
 	if entry == want {
 		t.Errorf("want entry %v got %v", want, entry)
+	}
+}
+
+func TestFindGroupByQuery(t *testing.T) {
+	wantEntries := []etc.GroupEntry{
+		{
+			Name:    "bob",
+			GroupID: "5",
+			Member:  "world",
+		},
+	}
+
+	testGroupBytes := []byte(`nick:x:1:bob
+james:x:5:world
+bob:x:7:jones`)
+	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	groupByQueryEntries, err := etc.GetGroupByQuery("Bob", "", "", entries)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i, got := range groupByQueryEntries {
+		want := wantEntries[i]
+		if want.Name != got.Name {
+			t.Errorf("want entry %v got %v", want.Name, got.Name)
+		}
+
+		if want.GroupID != got.GroupID {
+			t.Errorf("want entry %v got %v", want.GroupID, got.GroupID)
+		}
+
+		if want.Member != got.Member {
+			t.Errorf("want entry %v got %v", want.Member, got.Member)
+		}
+	}
+}
+
+func TestFindGroupByInvalidQuery(t *testing.T) {
+	wantEntries := []etc.GroupEntry{
+		{
+			Name:    "",
+			GroupID: "",
+			Member:  "",
+		},
+	}
+
+	testGroupBytes := []byte(`nick:x:1:bob
+james:x:5:world
+bob:x:7:jones`)
+	entries, err := etc.ParseGroup(bytes.NewReader(testGroupBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	groupByQueryEntries, err := etc.GetGroupByQuery("jerry", "", "", entries)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i, got := range groupByQueryEntries {
+		want := wantEntries[i]
+		if want.Name == got.Name {
+			t.Errorf("want entry %v got %v", want.Name, got.Name)
+		}
+
+		if want.GroupID == got.GroupID {
+			t.Errorf("want entry %v got %v", want.GroupID, got.GroupID)
+		}
+
+		if want.Member == got.Member {
+			t.Errorf("want entry %v got %v", want.Member, got.Member)
+		}
 	}
 }
